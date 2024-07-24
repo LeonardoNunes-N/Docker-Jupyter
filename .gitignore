@@ -1,0 +1,6 @@
+id_docker.pub
+.env
+.env.jup
+config.json
+/spark-logs
+/db-data

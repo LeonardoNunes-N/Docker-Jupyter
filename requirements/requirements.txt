@@ -1,0 +1,7 @@
+ipython 
+ipykernel
+jupyter
+pandas
+pyarrow
+numpy
+pyspark

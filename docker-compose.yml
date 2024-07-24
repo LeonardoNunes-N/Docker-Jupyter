@@ -1,0 +1,39 @@
+
+version: '3'
+
+services:
+  jupyter-container:
+    container_name: jupyter_con
+    image: jupyter-image:latest
+    build: . 
+    entrypoint: ["./entrypoint.sh"] 
+    env_file:
+      - .env.jup
+    ports: 
+      - '2222:22'  # Porta SSH
+      - '8889:8888' # Porta jupyter
+    networks:
+      cluster-network:
+        ipv4_address: 192.168.1.23
+    volumes:
+      - ./config.json:/home/notebooks/CaseEqualBi/config.json
+      - ./spark-logs:/opt/spark/spark-events
+    mem_limit: 1g   # Limite de 2 GB de RAM
+    cpus: 1       # Limite de 1 CPUs
+
+  database:
+    image: 'postgres:latest'
+    ports:
+      - 5432:5432
+    env_file:
+    - .env
+    volumes:
+    - .\db-data:/var/lib/postgresql/data/
+    - .\init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      cluster-network:
+        ipv4_address: 192.168.1.22
+
+networks:
+  cluster-network:
+    external: true
